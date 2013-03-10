@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Zillwc: Blend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px;      
+      }
+      div.dials {
+      	margin-top: 100px;
+      }
+      #portrait {
+	      display: none;
+      }
+      /* Portrait tablet to landscape and desktop */
+      @media (min-width: 768px) and (max-width: 979px) {
+      	  .span12, .dial, canvas, input.dial {
+	      	  display: none;
+      	  }
+	      #portrait {
+		      display: block;
+	      }
+      }
+    </style>
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Blend</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active hidden-phone"><a>Scroll the wheels till you find the color you are looking for</a></li>            
+            </ul>
+            <ul class="nav pull-right">
+            	<li class="active"><a id="rgb"></a></li>
+            	<li class="active"><a id="hex"></a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="dials row-fluid" align="center">
+      	<h1 id="portrait">Application only supported in landscape mode</h1>
+      	<div class="span12">
+	      <div class="span4"><input type="text" value="0" class="dial" id="r"></div>
+	      <div class="span4"><input type="text" value="0" class="dial" id="g"></div>
+	      <div class="span4"><input type="text" value="0" class="dial" id="b"></div>
+	    </div>
+      </div>
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.knob.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <!--script src="js/jquery.zclip.min.js"></script-->    
+    <script type="text/javascript">
+	    $(function() {
+	
+	    	// Update the top values to the onLoad values
+	    	updateVals();
+	    
+	    	/* Initial rgb values set to white */
+	    	r = 255;
+	    	g = 255;
+	    	b = 255; 
+	    
+	       /* Functions to gear the dials and change the values of the rgb values */ 
+		   $('#r').knob({
+			  'min':0,
+			  'max':255,
+			  'width': '300',
+			  'height': '300',
+			  'fgColor': '#BF2736',
+			  'change': function(v) {
+				  r = v;
+				  changeBkg();
+				  updateVals();
+			  }
+		   });
+		   $('#g').knob({
+			  'min':0,
+			  'max':255,
+			  'width': '300',
+			  'height': '300',
+			  'fgColor': '#92CCA5',
+			  'change': function(v) {
+				  g = v;
+				  changeBkg();
+				  updateVals();
+			  }
+		   });
+		   $('#b').knob({
+			  'min':0,
+			  'max':255,
+			  'width': '300',
+			  'height': '300',
+			  'change': function(v) {
+				  b = v;
+				  changeBkg();
+				  updateVals();
+			  }
+		   });
+		   
+		   
+		   /* Functions to copy the color name and the hex code to clipboard on user click--> still under work
+		   $('a#rgb').zclip({
+			   path:'js/ZeroClipboard.swf',
+			   copy: $('#rgb').html(),
+			   afterCopy: function(v) {
+				   alertify.success('Copied RGB Value to Clipboard');
+			   }
+		   });
+		   $('a#hex').zclip({
+			   path:'js/ZeroClipboard.swf',
+			   copy: $('#hex').html(),
+			   afterCopy: function(v) {
+				   alertify.success('Copied Hex to Clipboard');
+			   }
+		   }); 
+		   */
+		      
+
+		   /* Function to change the background to the current rgb values */
+		   function changeBkg() {
+		       $("body").css('background-color', 'rgb('+r+','+g+','+b+')');
+		   }
+		   /* Function to update the RGB and Hex val on top */
+		   function updateVals() {
+			   var rgb = $("body").css("background-color");
+			   var hex = rgb2hex(rgb);
+			   $("#rgb").html(rgb);
+			   $("#hex").html(hex.toUpperCase());
+		   }
+		   /* Function to calculate the hex from the rgb value */
+		   function rgb2hex(rgb) {
+			   rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+			   function hex(x) {
+			       return ("0" + parseInt(x).toString(16)).slice(-2);
+			   }
+			   return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+		   }	   		   
+			   
+	    });
+    </script>
+    
+    
+</body>
+<style type="text/css"></style>
+</html>
